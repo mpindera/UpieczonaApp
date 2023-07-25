@@ -21,7 +21,6 @@ class UpieczonaViewModel(
             val response = api.fetchAll()
 
             state2.value = response
-
             Log.d("RESPONSEEEEEE","$response")
         }
     }

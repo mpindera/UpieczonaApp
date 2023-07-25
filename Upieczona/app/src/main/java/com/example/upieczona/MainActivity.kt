@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import com.example.http.NetworkModule
 import com.example.http.TopAppBarUpieczona
 import com.example.http.UpieczonaViewModel
+import com.example.upieczona.category.CategoryTopTab
 import com.example.upieczona.ui.theme.UpieczonaTheme
 
 class MainActivity : ComponentActivity() {
@@ -39,47 +40,10 @@ class MainActivity : ComponentActivity() {
                             .fillMaxSize()
                     ) {
                         TopAppBarUpieczona()
-                        FetchCategoriesFromApi()
+                        CategoryTopTab()
                     }
                 }
             }
         }
-    }
-
-    @Composable
-    private fun FetchDataFromApi() {
-        val viewModel = remember {
-            UpieczonaViewModel(api = NetworkModule().api)
-        }
-        val state = viewModel.state.collectAsState()
-
-        LazyRow {
-            items(state.value) {
-                Text(text = it.title.rendered)
-                Spacer(modifier = Modifier.padding(10.dp))
-            }
-        }
-    }
-
-    @Composable
-    private fun FetchCategoriesFromApi() {
-        val viewModel = remember {
-            UpieczonaViewModel(api = NetworkModule().api)
-        }
-
-        val state2 = viewModel.state2.collectAsState()
-
-        Row(
-            modifier = Modifier
-                .padding(start = 10.dp, end = 10.dp, top = 25.dp)
-        ) {
-            LazyRow {
-                items(state2.value) {
-                    Text(text = it.name)
-                    Spacer(modifier = Modifier.padding(10.dp))
-                }
-            }
-        }
-
     }
 }
