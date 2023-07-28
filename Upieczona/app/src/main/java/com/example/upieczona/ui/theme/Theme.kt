@@ -17,13 +17,14 @@ import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 
 private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
-    secondary = PurpleGrey80,
-    tertiary = Pink80
+    primary = Color(0xFFC5A7C5),
+    surface = Color.hsl(300.0F, 0.1F, 0.60F),
+    background = Color.White, // tło
+    onBackground = Color.Black // napis tła
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = Color.hsl(350.0F, 0.4F, 0.82F),
+    primary = PinkUpieczona,
     secondary = PurpleGrey40,
     tertiary = Pink40
 

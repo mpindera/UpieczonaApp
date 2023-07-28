@@ -1,4 +1,4 @@
-package com.example.http.dto
+package com.example.upieczona.dto
 
 
 import com.google.gson.annotations.SerializedName
