@@ -5,6 +5,8 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -14,7 +16,6 @@ import com.example.http.NetworkModule
 import com.example.http.TopAppBarUpieczona
 import com.example.http.UpieczonaViewModel
 import com.example.upieczona.category.CategoryTopTab
-import com.example.upieczona.grid.LazyGridOfPosts
 import com.example.upieczona.ui.theme.UpieczonaTheme
 
 class MainActivity : ComponentActivity() {
@@ -31,9 +32,9 @@ class MainActivity : ComponentActivity() {
                         modifier = Modifier
                             .fillMaxSize()
                     ) {
-                        TopAppBarUpieczona()
-                        Divider()
-                        CategoryTopTab(UpieczonaViewModel(api = NetworkModule().api))
+                        CategoryTopTab(
+                            UpieczonaViewModel(api = NetworkModule().api)
+                        )
                         Divider()
                     }
                 }

@@ -8,9 +8,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.example.upieczona.R
 
-val fontBold = FontFamily(
-    Font(R.font.snell_bold_bt, weight = FontWeight.Bold)
-)
+val fontUpieczona = FontFamily(Font(R.font.snell_regular))
+
+val fontContainer = FontFamily(Font(R.font.roboto_condensed_regular))
+
 // Set of Material typography styles to start with
 val Typography = Typography(
     bodyLarge = TextStyle(
@@ -21,19 +22,17 @@ val Typography = Typography(
         letterSpacing = 0.5.sp
     ),
     titleLarge = TextStyle(
-        fontFamily = fontBold,
-        fontWeight = FontWeight.Bold,
+        fontFamily = fontUpieczona,
+        fontWeight = FontWeight.Normal,
         fontSize = 40.sp,
         lineHeight = 28.sp,
         letterSpacing = 0.sp
+    ),
+    titleMedium = TextStyle(
+        fontFamily =  fontContainer,
+        fontWeight = FontWeight.Normal,
+        fontSize = 14.sp,
+        lineHeight = 28.sp,
+        letterSpacing = 0.sp
     )
-    /*
-    labelSmall = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Medium,
-        fontSize = 11.sp,
-        lineHeight = 16.sp,
-        letterSpacing = 0.5.sp
-    )
-    */
 )
