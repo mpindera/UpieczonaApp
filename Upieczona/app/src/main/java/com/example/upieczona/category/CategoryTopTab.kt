@@ -1,10 +1,9 @@
 package com.example.upieczona.category
 
-import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ScrollableTabRow
 import androidx.compose.material3.Tab
@@ -20,36 +19,47 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
-import com.example.http.TopAppBarUpieczona
-import com.example.http.UpieczonaViewModel
+import androidx.navigation.NavController
+import com.example.upieczona.UpieczonaViewModel
 import com.example.upieczona.grid.LazyGridOfPosts
+import com.example.upieczona.topappbar.TopAppBarUpieczona
 
 @Composable
-fun CategoryTopTab(upieczonaViewModel: UpieczonaViewModel) {
+fun CategoryTopTab(upieczonaViewModel: UpieczonaViewModel,navController: NavController) {
 
     val state2 by upieczonaViewModel.state2.collectAsState()
     val isLoading by upieczonaViewModel.isLoading.collectAsState()
     var selectedIndex by remember { mutableStateOf(-1) }
     var showIndicator by remember { mutableStateOf(true) }
-    val state = upieczonaViewModel.stateNames.collectAsState()
-    val stateNames = upieczonaViewModel.FirstStateNames.collectAsState()
     var chosenCategory by remember { mutableStateOf("") }
+    val allPosts = upieczonaViewModel.allPosts
+    val allPostsFromCategories = upieczonaViewModel.allPostsTEST
+
+    val postsToShow = if (selectedIndex == -1) allPosts else allPostsFromCategories
 
     var select by remember {
         mutableStateOf(0)
+    }
+
+    var scrollState by remember {
+        mutableStateOf(LazyGridState(0))
     }
 
     fun onTabClick(index: Int) {
         selectedIndex = index
     }
 
-    TopAppBarUpieczona(upieczonaViewModel) {
+    TopAppBarUpieczona {
         selectedIndex = -1
+        scrollState = LazyGridState(0)
     }
-    Divider()
+
+    if (selectedIndex == -1) {
+        FetchAllPosts(upieczonaViewModel = upieczonaViewModel)
+    } else {
+        FetchAllPostsByCategories(upieczonaViewModel = upieczonaViewModel, select = select)
+    }
 
     if (isLoading) {
         CircularProgressIndicator()
@@ -57,7 +67,7 @@ fun CategoryTopTab(upieczonaViewModel: UpieczonaViewModel) {
         if (state2.isEmpty()) {
             Text(text = "No data available")
         } else {
-            Column() {
+            Column {
                 ScrollableTabRow(selectedTabIndex = selectedIndex.coerceIn(-1, state2.size - 1),
                     edgePadding = 0.dp,
                     indicator = { tabPositions ->
@@ -84,26 +94,27 @@ fun CategoryTopTab(upieczonaViewModel: UpieczonaViewModel) {
                             Text(
                                 fontFamily = MaterialTheme.typography.titleMedium.fontFamily,
                                 color = Color(0xFF001018),
-                                fontStyle = FontStyle.,
-                                text = category.name
+                                text = category.name.uppercase()
                             )
                         })
                     }
                 }
-
-                LaunchedEffect(select) {
-                    upieczonaViewModel.fetchPostsForCategory(select)
-                }
-//TODO
-                val postsToShow = if (selectedIndex == -1) stateNames else state
-                Text(
-                    fontFamily = MaterialTheme.typography.titleMedium.fontFamily,
-                    color = Color(0xFF001018),
-                    text = chosenCategory
-                )
-                LazyGridOfPosts(posts = postsToShow)
-
+                LazyGridOfPosts(allPosts = postsToShow, scrollState = scrollState, navController = navController)
             }
         }
+    }
+}
+
+@Composable
+private fun FetchAllPosts(upieczonaViewModel: UpieczonaViewModel) {
+    LaunchedEffect(key1 = 1) {
+        upieczonaViewModel.fetchAllPosts()
+    }
+}
+
+@Composable
+private fun FetchAllPostsByCategories(upieczonaViewModel: UpieczonaViewModel, select: Int) {
+    LaunchedEffect(key1 = select) {
+        upieczonaViewModel.fetchAllPostsTEST(select)
     }
 }

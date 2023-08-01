@@ -13,6 +13,15 @@ interface UpieczonaApi {
     suspend fun fetchAll(): CategoriesOfUpieczona
 
     @GET("wp-json/wp/v2/posts")
+    suspend fun fetchPostsFromFirstPage(@Query("page") categoryId: Int): PostsOfUpieczona
+
+    @GET("wp-json/wp/v2/posts")
     suspend fun fetchCategoryPosts(@Query("categories") categoryId: Int): PostsOfUpieczona
+
+    @GET("wp-json/wp/v2/posts")
+    suspend fun fetchCategoryPostsTEST(
+        @Query("categories") categoryId: Int,
+        @Query("page") page: Int
+    ): PostsOfUpieczona
 }
 
