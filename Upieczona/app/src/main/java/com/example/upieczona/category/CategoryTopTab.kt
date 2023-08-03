@@ -7,8 +7,6 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ScrollableTabRow
 import androidx.compose.material3.Tab
-import androidx.compose.material3.TabRowDefaults
-import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -21,12 +19,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.upieczona.UpieczonaViewModel
+import com.example.upieczona.viewmodels.UpieczonaViewModel
 import com.example.upieczona.grid.LazyGridOfPosts
-import com.example.upieczona.topappbar.TopAppBarUpieczona
 
 @Composable
-fun CategoryTopTab(upieczonaViewModel: UpieczonaViewModel,navController: NavController) {
+fun CategoryTopTab(upieczonaViewModel: UpieczonaViewModel, navController: NavController) {
 
     val state2 by upieczonaViewModel.state2.collectAsState()
     val isLoading by upieczonaViewModel.isLoading.collectAsState()
@@ -34,7 +31,7 @@ fun CategoryTopTab(upieczonaViewModel: UpieczonaViewModel,navController: NavCont
     var showIndicator by remember { mutableStateOf(true) }
     var chosenCategory by remember { mutableStateOf("") }
     val allPosts = upieczonaViewModel.allPosts
-    val allPostsFromCategories = upieczonaViewModel.allPostsTEST
+    val allPostsFromCategories = upieczonaViewModel.allCategoryPosts
 
     val postsToShow = if (selectedIndex == -1) allPosts else allPostsFromCategories
 
@@ -50,10 +47,7 @@ fun CategoryTopTab(upieczonaViewModel: UpieczonaViewModel,navController: NavCont
         selectedIndex = index
     }
 
-    TopAppBarUpieczona {
-        selectedIndex = -1
-        scrollState = LazyGridState(0)
-    }
+
 
     if (selectedIndex == -1) {
         FetchAllPosts(upieczonaViewModel = upieczonaViewModel)
@@ -71,15 +65,6 @@ fun CategoryTopTab(upieczonaViewModel: UpieczonaViewModel,navController: NavCont
                 ScrollableTabRow(selectedTabIndex = selectedIndex.coerceIn(-1, state2.size - 1),
                     edgePadding = 0.dp,
                     indicator = { tabPositions ->
-                        if (showIndicator && selectedIndex >= 0) {
-                            TabRowDefaults.Indicator(
-                                Modifier.tabIndicatorOffset(
-                                    tabPositions[selectedIndex.coerceIn(
-                                        0, state2.size - 1
-                                    )]
-                                )
-                            )
-                        }
                     }) {
                     state2.forEachIndexed { index, category ->
                         Tab(modifier = Modifier.padding(
@@ -99,7 +84,7 @@ fun CategoryTopTab(upieczonaViewModel: UpieczonaViewModel,navController: NavCont
                         })
                     }
                 }
-                LazyGridOfPosts(allPosts = postsToShow, scrollState = scrollState, navController = navController)
+                LazyGridOfPosts(allPosts = postsToShow, scrollState = scrollState)
             }
         }
     }
