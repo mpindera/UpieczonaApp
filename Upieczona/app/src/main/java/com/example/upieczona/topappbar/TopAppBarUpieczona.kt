@@ -1,6 +1,5 @@
 package com.example.upieczona.topappbar
 
-import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.wrapContentSize
@@ -9,64 +8,48 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavHostController
-import com.example.upieczona.Destination
-import com.example.upieczona.staticver.MaterialsUtils
-import com.example.upieczona.viewmodels.ViewModelUpieczonaTopAndBottomBar
+import androidx.compose.ui.res.stringResource
+import com.example.upieczona.R
+import com.example.upieczona.staticobjects.MaterialsUtils
 import kotlinx.coroutines.delay
 
-// Inside your TopAppBarUpieczona composable
 @Composable
-fun TopAppBarUpieczona(navController: NavHostController) {
-
-    val upieczonaViewModel: ViewModelUpieczonaTopAndBottomBar = viewModel()
-
-
+fun TopAppBarUpieczona(
+    onUpieczonaClick: () -> Unit
+) {
+    var shineAlpha by remember {
+        mutableStateOf(1f)
+    }
     LaunchedEffect(Unit) {
         val waitDuration = 100L
         delay(waitDuration)
-        upieczonaViewModel.shineAlpha = 1f
+        shineAlpha = 1f
     }
 
-    TopBar(upieczonaViewModel = upieczonaViewModel, navController = navController)
+    TopBar(
+        onClickUpieczona = onUpieczonaClick
+    )
 }
 
-// Inside your TopBar composable
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
 fun TopBar(
-    upieczonaViewModel: ViewModelUpieczonaTopAndBottomBar,
-    navController: NavHostController,
+    onClickUpieczona: () -> Unit
 ) {
-    val materialTypo = MaterialTheme.typography.titleLarge.fontFamily
-    var info = true
-    Log.d("VAV", info.toString())
     TopAppBar(
         title = {
             Text(
-                text = "Upieczona",
-                fontFamily = materialTypo,
+                text = stringResource(id = R.string.app_name),
+                fontFamily = MaterialTheme.typography.titleLarge.fontFamily,
                 modifier = Modifier
                     .fillMaxSize()
-                    .then(upieczonaViewModel.tapGesture)
-                    .clickable {
-                        if (info) {
-                            navController.navigate("MainScreenOfUpieczonaToRefresh")
-                            info = false
-                        }
-                    }
                     .wrapContentSize(Alignment.Center)
-                    .alpha(upieczonaViewModel.shineAlpha)
+                    .clickable {
+                        onClickUpieczona()
+                    }
             )
         },
         colors = TopAppBarDefaults.smallTopAppBarColors(

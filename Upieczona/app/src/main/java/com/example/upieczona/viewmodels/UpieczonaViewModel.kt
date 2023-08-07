@@ -1,13 +1,19 @@
 package com.example.upieczona.viewmodels
 
 import android.util.Log
-import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.foundation.layout.height
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.TabPosition
+import androidx.compose.material3.TabRowDefaults
+import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
+import androidx.compose.runtime.*
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.http.UpieczonaApi
-import com.example.http.dto2.CategoriesOfUpieczonaItemDto
-import com.example.upieczona.dto.PostsOfUpieczonaItemDto
+import com.example.upieczona.api.UpieczonaApi
+import com.example.upieczona.dtocategories.CategoriesOfUpieczonaItemDto
+import com.example.upieczona.dtoposts.PostsOfUpieczonaItemDto
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -16,6 +22,9 @@ import kotlinx.coroutines.launch
 class UpieczonaViewModel(
     private val api: UpieczonaApi,
 ) : ViewModel() {
+
+
+    var select = MutableStateFlow(0)
 
     val state2 = MutableStateFlow(emptyList<CategoriesOfUpieczonaItemDto>())
 
@@ -27,6 +36,9 @@ class UpieczonaViewModel(
     private val _allCategoryPosts = mutableStateOf<List<PostsOfUpieczonaItemDto>>(emptyList())
     val allCategoryPosts: State<List<PostsOfUpieczonaItemDto>> = _allCategoryPosts
 
+
+    private val _postDetails = mutableStateOf<List<PostsOfUpieczonaItemDto>>(emptyList())
+    val postDetails: State<List<PostsOfUpieczonaItemDto>> = _postDetails
 
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading
@@ -51,6 +63,17 @@ class UpieczonaViewModel(
             } finally {
                 _isLoading.value = false
             }
+        }
+    }
+
+    suspend fun fetchPostById(postId: Int) {
+        try {
+            val response = api.fetchPostsDetails(postId)
+
+            _postDetails.value = response
+
+        } catch (e: Exception) {
+            Log.e("ER", e.message.toString())
         }
     }
 
@@ -85,6 +108,13 @@ class UpieczonaViewModel(
     }
 
 
-
-
+    @Composable
+    fun Indicator(tabPositions: List<TabPosition>, selectedIndex: Int) {
+        TabRowDefaults.Indicator(
+            Modifier
+                .tabIndicatorOffset(tabPositions[selectedIndex])
+                .height(3.dp),
+            color = MaterialTheme.colorScheme.primary
+        )
+    }
 }

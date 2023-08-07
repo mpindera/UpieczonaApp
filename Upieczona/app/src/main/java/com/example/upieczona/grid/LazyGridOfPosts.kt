@@ -1,5 +1,6 @@
 package com.example.upieczona.grid
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -28,14 +29,17 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.text.HtmlCompat
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
-import com.example.upieczona.dto.PostsOfUpieczonaItemDto
+import com.example.upieczona.dtoposts.PostsOfUpieczonaItemDto
 
 @Composable
 fun LazyGridOfPosts(
     allPosts: State<List<PostsOfUpieczonaItemDto>>,
     scrollState: LazyGridState,
+    navController: NavHostController
 ) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
@@ -47,7 +51,7 @@ fun LazyGridOfPosts(
                         .padding(8.dp)
                         .aspectRatio(0.5f)
                         .clickable {
-
+                            navController.navigate("Content/${allPosts.value[index].id}")
                         }
                         .background(Color.White),
                     contentAlignment = Alignment.Center
@@ -61,7 +65,7 @@ fun LazyGridOfPosts(
 
                         // First Section
                         Box(
-                            Modifier
+                            modifier = Modifier
                                 .weight(1f)
                                 .fillMaxWidth()
                                 .padding(top = 20.dp, start = 10.dp, end = 10.dp, bottom = 25.dp)

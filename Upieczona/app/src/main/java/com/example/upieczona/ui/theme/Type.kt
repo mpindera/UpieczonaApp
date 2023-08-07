@@ -29,10 +29,17 @@ val Typography = Typography(
         letterSpacing = 0.sp
     ),
     titleMedium = TextStyle(
-        fontFamily =  fontContainer,
+        fontFamily = fontContainer,
         fontWeight = FontWeight.Normal,
         fontSize = 14.sp,
         lineHeight = 28.sp,
         letterSpacing = 0.sp
+    ),
+    headlineLarge = TextStyle(
+        fontFamily = fontContainer,
+        fontWeight = FontWeight.Normal,
+        lineHeight = 28.sp,
+        letterSpacing = 0.sp
     )
+
 )

@@ -15,10 +15,11 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
+import com.example.upieczona.staticobjects.MaterialsUtils
 
 private val DarkColorScheme = darkColorScheme(
-    primary = Color(0xFFC5A7C5),
-    surface = Color.hsl(300.0F, 0.1F, 0.60F),
+    primary = MaterialsUtils.colorPink,
+    surface = MaterialsUtils.colorSurface,
     background = Color.White, // tło
     onBackground = Color.Black // napis tła
 )
