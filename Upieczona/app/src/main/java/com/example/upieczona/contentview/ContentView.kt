@@ -6,6 +6,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -13,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -40,21 +43,21 @@ fun ContentViewUpieczona(
             navController.navigate(Destination.MainPageOfUpieczona.route)
         }
 
-
-
         FetchDetails(upieczonaViewModel = upieczonaViewModel, postIndex = postIndex)
         LazyColumn {
             items(postDetails.value.size) { index ->
+
                 val matches = regexx.findAll(postDetails.value[index].content.rendered)
                 val urls = matches.map { it.groupValues[1] }.toList()
+
                 val decodedText = HtmlCompat.fromHtml(
                     postDetails.value[index].title.rendered, HtmlCompat.FROM_HTML_MODE_LEGACY
                 ).toString()
+
                 if (postDetails.value[index].id == postIndex) {
 
                     Divider()
                     ImagePager(urls.size, urls)
-                    Divider()
 
                     Column(
                         modifier = Modifier
@@ -63,6 +66,7 @@ fun ContentViewUpieczona(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.Center
                     ) {
+
                         Text(
                             modifier = Modifier.padding(10.dp),
                             fontFamily = MaterialTheme.typography.headlineLarge.fontFamily,
@@ -81,8 +85,10 @@ fun ContentViewUpieczona(
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ImagePager(imageCount: Int, urls: List<String>) {
+    val pageState = rememberPagerState(initialPage = 0)
     HorizontalPager(
-        pageCount = imageCount
+        pageCount = imageCount,
+        state = pageState
     ) { pageIndex ->
         Box(
             modifier = Modifier
@@ -97,8 +103,35 @@ fun ImagePager(imageCount: Int, urls: List<String>) {
             )
         }
     }
+    Divider()
+    Row(
+        modifier = Modifier
+            .height(20.dp)
+            .fillMaxSize(),
+        verticalAlignment = Alignment.Bottom,
+        horizontalArrangement = Arrangement.Center
+    ) {
+        repeat(imageCount) { iteration ->
+            val color =
+                if (pageState.currentPage == iteration) Color.DarkGray else Color.LightGray
+            Box(
+                modifier = Modifier
+                    .padding(2.dp)
+                    .clip(CircleShape)
+                    .background(color)
+                    .size(7.dp)
+
+            )
+        }
+    }
 }
 
+/*@Composable
+fun abc() {
+    LaunchedEffect(ImagePager(imageCount = , urls = )) {
+
+    }
+}*/
 
 @Composable
 fun FetchDetails(upieczonaViewModel: UpieczonaViewModel, postIndex: Int?) {
