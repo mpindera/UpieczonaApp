@@ -86,6 +86,7 @@ fun ContentViewUpieczona(
 @Composable
 fun ImagePager(imageCount: Int, urls: List<String>) {
     val pageState = rememberPagerState(initialPage = 0)
+
     HorizontalPager(
         pageCount = imageCount,
         state = pageState
@@ -103,6 +104,7 @@ fun ImagePager(imageCount: Int, urls: List<String>) {
             )
         }
     }
+
     Divider()
     Row(
         modifier = Modifier
