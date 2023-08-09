@@ -1,6 +1,6 @@
 package com.example.upieczona
 
-import com.example.http.dto2.CategoriesOfUpieczonaItemDto
+import com.example.upieczona.dtocategories.CategoriesOfUpieczonaItemDto
 
 sealed class CategoriesState {
     object Loading : CategoriesState()

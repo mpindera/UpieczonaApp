@@ -1,7 +1,7 @@
 package com.example.http
 
-import com.example.http.dto2.CategoriesOfUpieczona
-import com.example.upieczona.dto.PostsOfUpieczona
+import com.example.upieczona.dtocategories.CategoriesOfUpieczona
+import com.example.upieczona.dtoposts.PostsOfUpieczona
 import retrofit2.http.GET
 import retrofit2.http.Query
 
