@@ -70,7 +70,7 @@ object MaterialsUtils {
     val colorSurface = Color.hsl(300.0F, 0.1F, 0.60F)
 
     val regexPatternPhotosUpieczona =
-        """http://www\.upieczona\.pl/wp-content/uploads/\d{4}/\d{2}/[^"]+\.(jpg|jpeg)""".toRegex()
+        """http://www\.upieczona\.pl/wp-content/uploads/\d{4}/\d{2}/[^"]+\.(jpg|jpeg|png)""".toRegex()
 
     val regexPatternTitleIngredientsUpieczona =
         """<h3 class="ingredients-title">(.*)</h3>""".toRegex()

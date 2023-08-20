@@ -64,6 +64,7 @@ fun ContentViewUpieczona(
 
     val postDetails = remember(upieczonaViewModel.allPosts) {
         postIndex?.let { index ->
+            Log.d("infopick","infopick - ${upieczonaViewModel.allPosts.value.find { it.id == index }}")
             upieczonaViewModel.allPosts.value.find { it.id == index }
         }
     }
@@ -186,6 +187,11 @@ fun ContentViewUpieczona(
                             2 -> FetchTitleWhenTwoTitle()
                         }
                     }
+
+                    Log.d(
+                        "allContentFromDetails",
+                        ingredientTitleUpieczona[0]
+                    )
 
                     LazyColumn(
                         modifier = Modifier.fillMaxSize(),

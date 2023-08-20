@@ -33,6 +33,7 @@ class FavoriteManager(private val context: Context) {
         sharedPreferences.edit().putStringSet(FAVORITE_KEY, favoritesSet).apply()
     }
 
+
     fun removeFavoritePost(postId: String) {
         val favoritesMap = favoritePostsMap.toMutableMap()
         favoritesMap.remove(postId)
