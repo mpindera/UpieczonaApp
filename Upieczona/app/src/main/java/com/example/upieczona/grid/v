@@ -43,7 +43,7 @@ import androidx.core.text.HtmlCompat
 import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
-import com.example.upieczona.FavoriteManager
+import com.example.upieczona.favorite.FavoriteManager
 import com.example.upieczona.dtoposts.PostsOfUpieczonaItemDto
 import com.example.upieczona.staticobjects.MaterialsUtils.CreateBoxContent
 

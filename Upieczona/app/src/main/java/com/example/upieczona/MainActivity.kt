@@ -20,50 +20,50 @@ import com.example.upieczona.ui.theme.UpieczonaTheme
 
 class MainActivity : ComponentActivity() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContent {
-            UpieczonaTheme {
-                val navController = rememberNavController()
-                NavigationAppHost(navController = navController)
-            }
-        }
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    setContent {
+      UpieczonaTheme {
+        val navController = rememberNavController()
+        NavigationAppHost(navController = navController)
+      }
     }
+  }
 }
 
 
 @Composable
 fun NavigationAppHost(navController: NavHostController) {
-    NavHost(
-        navController = navController,
-        startDestination = Destination.HomePageOfUpieczona.route
-    ) {
-        composable(Destination.HomePageOfUpieczona.route) { MainScreenUpieczona(navController) }
-        composable(
-            Destination.ContentPageOfUpieczona.route,
-            arguments = listOf(navArgument("postIndex") { type = NavType.IntType })
-        ) { backStackEntry ->
-            val postIndex = backStackEntry.arguments?.getInt("postIndex")
-            ContentViewUpieczona(
-                postIndex = postIndex,
-                upieczonaViewModel = ApiUtils.apiUtil,
-                navController = navController
-            )
-        }
-        composable(Destination.MainPageOfUpieczona.route) {
-            MainScreenUpieczona(navController)
-        }
-        composable(Destination.FavoritePageOfUpieczona.route) {
-            FavoritePage(navController = navController)
-        }
+  NavHost(
+    navController = navController,
+    startDestination = Destination.HomePageOfUpieczona.route
+  ) {
+    composable(Destination.HomePageOfUpieczona.route) { MainScreenUpieczona(navController) }
+    composable(
+      Destination.ContentPageOfUpieczona.route,
+      arguments = listOf(navArgument("postIndex") { type = NavType.IntType })
+    ) { backStackEntry ->
+      val postIndex = backStackEntry.arguments?.getInt("postIndex")
+      ContentViewUpieczona(
+        postIndex = postIndex,
+        upieczonaViewModel = ApiUtils.apiUtil,
+        navController = navController
+      )
     }
+    composable(Destination.MainPageOfUpieczona.route) {
+      MainScreenUpieczona(navController)
+    }
+    composable(Destination.FavoritePageOfUpieczona.route) {
+      FavoritePage(navController = navController)
+    }
+  }
 }
 
 @Preview(showBackground = true)
 @Composable
 fun MainActivityPreview() {
-    val navController = rememberNavController()
-    NavigationAppHost(navController = navController)
+  val navController = rememberNavController()
+  NavigationAppHost(navController = navController)
 }
 
 

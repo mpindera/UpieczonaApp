@@ -23,67 +23,67 @@ import com.example.upieczona.viewmodels.UpieczonaViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreenUpieczona(navController: NavHostController) {
-    Surface(
-        modifier = Modifier.fillMaxSize(),
-        color = MaterialTheme.colorScheme.background,
-        shadowElevation = 20.dp,
-    ) {
-        val activity = LocalContext.current as? Activity
-        var mainPageState by remember {
-            mutableStateOf(MainPageState.Default)
-        }
-
-        LaunchedEffect(mainPageState) {
-            if (mainPageState == MainPageState.UpieczonaClicked) {
-                navController.navigate(Destination.MainPageOfUpieczona.route)
-            }
-        }
-
-        BackHandler(enabled = true) {
-            activity?.moveTaskToBack(true)
-        }
-
-        Scaffold(topBar = {
-            if (mainPageState == MainPageState.Default) {
-                TopAppBarUpieczona(onUpieczonaClick = {
-                    mainPageState = MainPageState.UpieczonaClicked
-                }, navController = navController)
-            }
-        }, content = { padding ->
-            Column(
-                modifier = Modifier.padding(padding)
-            ) {
-                MainPageOfUpieczonaWithRecipes(
-                    upieczonaViewModel = ApiUtils.apiUtil,
-                    mainPageState = mainPageState,
-                    navController = navController
-                ) { newState ->
-                    mainPageState = newState
-                }
-            }
-        }, bottomBar = {
-            BottomAppBarUpieczona(navController = navController)
-        })
-
+  Surface(
+    modifier = Modifier.fillMaxSize(),
+    color = MaterialTheme.colorScheme.background,
+    shadowElevation = 20.dp,
+  ) {
+    val activity = LocalContext.current as? Activity
+    var mainPageState by remember {
+      mutableStateOf(MainPageState.Default)
     }
+
+    LaunchedEffect(mainPageState) {
+      if (mainPageState == MainPageState.UpieczonaClicked) {
+        navController.navigate(Destination.MainPageOfUpieczona.route)
+      }
+    }
+
+    BackHandler(enabled = true) {
+      activity?.moveTaskToBack(true)
+    }
+
+    Scaffold(topBar = {
+      if (mainPageState == MainPageState.Default) {
+        TopAppBarUpieczona(onUpieczonaClick = {
+          mainPageState = MainPageState.UpieczonaClicked
+        }, navController = navController)
+      }
+    }, content = { padding ->
+      Column(
+        modifier = Modifier.padding(padding)
+      ) {
+        MainPageOfUpieczonaWithRecipes(
+          upieczonaViewModel = ApiUtils.apiUtil,
+          mainPageState = mainPageState,
+          navController = navController
+        ) { newState ->
+          mainPageState = newState
+        }
+      }
+    }, bottomBar = {
+      BottomAppBarUpieczona(navController = navController)
+    })
+
+  }
 }
 
 enum class MainPageState {
-    Default, UpieczonaClicked
+  Default, UpieczonaClicked
 }
 
 @Composable
 fun MainPageOfUpieczonaWithRecipes(
-    upieczonaViewModel: UpieczonaViewModel,
-    mainPageState: MainPageState,
-    navController: NavHostController,
-    onStateChange: (MainPageState) -> Unit
+  upieczonaViewModel: UpieczonaViewModel,
+  mainPageState: MainPageState,
+  navController: NavHostController,
+  onStateChange: (MainPageState) -> Unit
 ) {
-    if (mainPageState == MainPageState.Default) {
-        MainPageOfUpieczona(
-            upieczonaViewModel = upieczonaViewModel,
-            navController = navController
-        )
-    }
+  if (mainPageState == MainPageState.Default) {
+    MainPageOfUpieczona(
+      upieczonaViewModel = upieczonaViewModel,
+      navController = navController
+    )
+  }
 }
 
