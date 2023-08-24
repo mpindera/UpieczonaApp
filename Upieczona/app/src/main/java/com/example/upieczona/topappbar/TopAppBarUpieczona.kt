@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -81,13 +82,13 @@ fun TopBar(
                 Icon(Icons.Default.ArrowBack, contentDescription = null)
             }
         },
-        /*actions = {
+        actions = {
             IconButton(onClick = {
 
             }) {
-                Icon(Icons.Default.Favorite, contentDescription = null)
+                Icon(Icons.Default.Search, contentDescription = null)
             }
-        }*/
+        }
     )
 }
 

@@ -58,91 +58,88 @@ import com.example.upieczona.mainscreen.MainPageState
 import com.example.upieczona.topappbar.TopAppBarUpieczona
 
 object MaterialsUtils {
-/*        val colorPinkMain = Color.hsl(350.0F, 0.4F, 0.88F)
-    val colorPink = Color(0xFFC5A7C5)
-    val colorRed = Color(0xBEE02C2C)
-    val colorSurface = Color.hsl(300.0F, 0.1F, 0.60F)*/
+  val colorPinkMain = Color(0xFFd6bbb4)
+  val colorPink = Color(0xFFeee3df)
+  val PinkUpieczona = Color(0xFFd6bbb4)
+  val colorRed = Color(0xBEE02C2C)
+  val colorSurface = Color.hsl(300.0F, 0.1F, 0.60F)
 
-    val colorPinkMain = Color(0xFFd6bbb4)
-    val colorPink = Color(0xFFeee3df)
-    val PinkUpieczona = Color(0xFFd6bbb4)
-    val colorRed = Color(0xBEE02C2C)
-    val colorSurface = Color.hsl(300.0F, 0.1F, 0.60F)
+  val regexPatternPhotosUpieczona =
+    """http://www\.upieczona\.pl/wp-content/uploads/\d{4}/\d{2}/[^"]+\.(jpg|jpeg|png)""".toRegex()
 
-    val regexPatternPhotosUpieczona =
-        """http://www\.upieczona\.pl/wp-content/uploads/\d{4}/\d{2}/[^"]+\.(jpg|jpeg|png)""".toRegex()
+  val regexPatternTitleIngredientsUpieczona = """<h3 class="ingredients-title">(.*)</h3>""".toRegex()
 
-    val regexPatternTitleIngredientsUpieczona =
-        """<h3 class="ingredients-title">(.*)</h3>""".toRegex()
+  val regexPatternShopListUpieczona =
+    """<p class="ingredient-item-name is-strikethrough-active">(.*?)</p>"""
 
-    val regexPatternShopListUpieczona =
-        """<p class="ingredient-item-name is-strikethrough-active">([^<]+)</p>""".toRegex()
+  val regexForRecipe = """<p>(.*?)<\/p>""".toRegex()
 
-    val ingredientsListPattern =
-        Regex("<ul class=\"ingredients-list\">(.*?)</ul>", RegexOption.DOT_MATCHES_ALL)
+  val ingredientsListPattern =
+    Regex("<ul class=\"ingredients-list\">(.*?)</ul>", RegexOption.DOT_MATCHES_ALL)
 
+  val recipeTitleInstruction = """<div class="entry-content"><p>(.*?)</p></div>""".toRegex()
 
-    @Composable
-    fun CreateBoxContent() {
+  @Composable
+  fun CreateBoxContent() {
+    Box(
+      modifier = Modifier
+        .padding(8.dp)
+        .aspectRatio(0.5f)
+        .background(Color.White),
+      contentAlignment = Alignment.Center
+    ) {
+
+      // Image Section
+      Column(
+        modifier = Modifier
+          .fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+      ) {
         Box(
-            modifier = Modifier
-                .padding(8.dp)
-                .aspectRatio(0.5f)
-                .background(Color.White),
-            contentAlignment = Alignment.Center
+          modifier = Modifier
+            .weight(1f)
+            .fillMaxWidth()
+            .padding(top = 20.dp, start = 10.dp, end = 10.dp, bottom = 25.dp)
+            .background(Color.White), contentAlignment = Alignment.Center
         ) {
-
-            // Image Section
-            Column(
-                modifier = Modifier
-                    .fillMaxSize(),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
-            ) {
-                Box(
-                    modifier = Modifier
-                        .weight(1f)
-                        .fillMaxWidth()
-                        .padding(top = 20.dp, start = 10.dp, end = 10.dp, bottom = 25.dp)
-                        .background(Color.White), contentAlignment = Alignment.Center
-                ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.img8820),
-                        contentDescription = null,
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier.fillMaxSize()
-                    )
-                }
-
-                // favorite Section
-                IconButton(
-                    onClick = {
-                        Icons.Default.Favorite
-                    },
-                    modifier = Modifier.align(Alignment.Start)
-                ) {
-                    Icon(Icons.Default.FavoriteBorder, contentDescription = null)
-                }
-
-                // Text Section
-                Box(
-                    modifier = Modifier
-                        .weight(0.5f)
-                        .fillMaxWidth()
-                        .padding(start = 10.dp, end = 10.dp)
-                        .clip(RoundedCornerShape(5.dp))
-                        .background(Color.White), contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        fontFamily = MaterialTheme.typography.titleMedium.fontFamily,
-                        textAlign = TextAlign.Center,
-                        color = Color(0xFF000000),
-                        text = "Zielone naleśniki na słodko z twarożkiem waniliowym",
-                        fontSize = 14.sp
-                    )
-                }
-            }
+          Image(
+            painter = painterResource(id = R.drawable.img8820),
+            contentDescription = null,
+            contentScale = ContentScale.Crop,
+            modifier = Modifier.fillMaxSize()
+          )
         }
+
+        // favorite Section
+        IconButton(
+          onClick = {
+            Icons.Default.Favorite
+          },
+          modifier = Modifier.align(Alignment.Start)
+        ) {
+          Icon(Icons.Default.FavoriteBorder, contentDescription = null)
+        }
+
+        // Text Section
+        Box(
+          modifier = Modifier
+            .weight(0.5f)
+            .fillMaxWidth()
+            .padding(start = 10.dp, end = 10.dp)
+            .clip(RoundedCornerShape(5.dp))
+            .background(Color.White), contentAlignment = Alignment.Center
+        ) {
+          Text(
+            fontFamily = MaterialTheme.typography.titleMedium.fontFamily,
+            textAlign = TextAlign.Center,
+            color = Color(0xFF000000),
+            text = "Zielone naleśniki na słodko z twarożkiem waniliowym",
+            fontSize = 14.sp
+          )
+        }
+      }
     }
+  }
 
 }

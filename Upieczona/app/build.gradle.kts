@@ -84,5 +84,6 @@ dependencies {
     implementation("com.google.accompanist:accompanist-pager-indicators:0.23.1")
 
     implementation("androidx.preference:preference-ktx:1.2.1")
+    implementation ("org.jsoup:jsoup:1.14.3")
 
 }

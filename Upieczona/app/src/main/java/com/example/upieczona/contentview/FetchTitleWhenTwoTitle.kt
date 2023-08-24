@@ -1,9 +1,11 @@
 package com.example.upieczona.contentview
 
 import android.util.Log
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -11,13 +13,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.text.HtmlCompat
 import com.example.upieczona.dtoposts.PostsOfUpieczonaItemDto
-import com.example.upieczona.staticobjects.MaterialsUtils.regexForRecipe
 import com.example.upieczona.staticobjects.MaterialsUtils.regexPatternShopListUpieczona
 import com.example.upieczona.viewmodels.UpieczonaViewModel
 
@@ -28,10 +31,8 @@ fun FetchTitleWhenTwoTitle(
   postDetails: PostsOfUpieczonaItemDto
 ) {
 
-  val recipeContents = upieczonaViewModel.fetchRecipe(postDetails.content.rendered)
 
   for (i in ingredientTitleUpieczona.indices) {
-
 
     val firstIngredients =
       Regex(regexPatternShopListUpieczona)
@@ -76,20 +77,55 @@ fun FetchTitleWhenTwoTitle(
       }
     }
   }
-  fun formatInstructions(input: String): String {
-    val sentences = input.split(". ")
+  Divider(modifier = Modifier.padding(top = 3.dp, bottom = 3.dp))
 
-    val formattedSentences = mutableListOf<String>()
-    for ((index, sentence) in sentences.withIndex()) {
-      val formattedSentence = "${index + 1}. $sentence"
-      formattedSentences.add(formattedSentence)
+  /* val formattedText = upieczonaViewModel.formatInstructions(
+     HtmlCompat.fromHtml(
+       recipeContent, HtmlCompat.FROM_HTML_MODE_LEGACY
+     ).toString()
+   )*/
+
+  val recipeTitleInstruction = upieczonaViewModel.formatInstructionsTitle(postDetails.content.rendered)
+  val up = upieczonaViewModel.fetchRecipe1(postDetails.content.rendered)
+
+  val emTitle = upieczonaViewModel.formatInstructionsTitleEM(postDetails.content.rendered)
+
+  var currentIndex = 0
+
+  for ((index, recipeContent) in up.withIndex()) {
+    val currentTitle = recipeTitleInstruction.getOrNull(currentIndex)
+
+    if (emTitle.isNotEmpty() && index < emTitle.size) {
+      Text(
+        modifier = Modifier.padding(start = 5.dp),
+        fontSize = 14.sp,
+        textAlign = TextAlign.Start,
+        text = emTitle[index],
+        fontStyle = FontStyle.Italic
+      )
     }
 
-    return formattedSentences.joinToString("\n")
+    if (!currentTitle.isNullOrBlank()) {
+      Text(
+        modifier = Modifier.padding(start = 8.dp, end = 8.dp),
+        fontFamily = MaterialTheme.typography.headlineSmall.fontFamily,
+        text = "\n$currentTitle",
+        fontSize = 20.sp,
+        textAlign = TextAlign.Start,
+      )
+
+      currentIndex++
+    }
+
+    Column(modifier = Modifier.padding(4.dp)) {
+      Text(
+        modifier = Modifier.padding(start = 5.dp),
+        fontSize = 14.sp,
+        textAlign = TextAlign.Start,
+        text = recipeContent,
+      )
+    }
   }
-  for (recipeContent in recipeContents) {
-    val formattedText = formatInstructions(recipeContent)
-    Text(text = formattedText)
-    Log.d("test1",formattedText)
-  }
+
+
 }
