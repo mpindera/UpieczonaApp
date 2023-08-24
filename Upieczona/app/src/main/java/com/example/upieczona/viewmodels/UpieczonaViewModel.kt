@@ -144,10 +144,6 @@ class UpieczonaViewModel(
       .distinct()
   }
 
-  fun ingredientsListsTEST(content: String): List<MatchResult> {
-    return recipeTitleInstruction.findAll(content).toList()
-  }
-
   fun fetchRecipe1(input: String): List<String> {
     val pattern = "<p>.*?</p>".toRegex()
     val matches = pattern.findAll(input).map { it.value }.toList()

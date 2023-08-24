@@ -72,8 +72,6 @@ object MaterialsUtils {
   val regexPatternShopListUpieczona =
     """<p class="ingredient-item-name is-strikethrough-active">(.*?)</p>"""
 
-  val regexForRecipe = """<p>(.*?)<\/p>""".toRegex()
-
   val ingredientsListPattern =
     Regex("<ul class=\"ingredients-list\">(.*?)</ul>", RegexOption.DOT_MATCHES_ALL)
 

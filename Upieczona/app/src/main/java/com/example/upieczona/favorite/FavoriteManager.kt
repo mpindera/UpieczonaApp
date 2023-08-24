@@ -14,8 +14,6 @@ class FavoriteManager(private val context: Context) {
   private val favoritePostsMap: MutableMap<Int, FavoriteData> = loadFavoritePosts()
   val favoritePostsState: MutableState<Map<Int, FavoriteData>> = mutableStateOf(favoritePostsMap)
 
-  val arr = mutableListOf<String>()
-
   private fun loadFavoritePosts(): MutableMap<Int, FavoriteData> {
     val favoritesSet = sharedPreferences.getStringSet(FAVORITE_KEY, emptySet()) ?: emptySet()
     val map = mutableMapOf<Int, FavoriteData>()
