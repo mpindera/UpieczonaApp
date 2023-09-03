@@ -1,0 +1,297 @@
+package com.example.upieczona.favorite
+
+import android.util.Log
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import com.example.upieczona.destination.Destination
+import com.example.upieczona.mainscreen.MainPageState
+import com.example.upieczona.staticobjects.ApiUtils
+import com.example.upieczona.topappbar.TopAppBarUpieczona
+import com.example.upieczona.viewmodels.MainViewModel
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun FavoritePage(navController: NavHostController, mainViewModel: MainViewModel) {
+  val local = LocalContext.current
+  val favoriteManager = FavoriteManager(local)
+  val favoritePosts = favoriteManager.getFavoritePosts()
+
+  Surface(
+    modifier = Modifier.fillMaxSize(),
+    color = MaterialTheme.colorScheme.background,
+    shadowElevation = 20.dp,
+  ) {
+
+    /* LaunchedEffect(mainPageState) {
+       if (mainPageState == MainPageState.UPIECZONA_CLICKED) {
+         navController.navigate(Destination.MainPageOfUpieczona.route)
+       }
+     }*/
+    mainViewModel.updatePageState(MainPageState.FAVORITE)
+    Log.d("test1", "Fav - ${mainViewModel.pageState.value}")
+    Scaffold(
+      topBar = {
+        TopAppBarUpieczona(
+          onUpieczonaClick = { mainViewModel.pageState.value },
+          navController = navController, onSearchIconClick = {}, mainViewModel = MainViewModel()
+        )
+      }, content = { padding ->
+        Column(
+          modifier = Modifier.padding(padding)
+        ) {
+          FavoriteGrid(favoritePosts, navController, ApiUtils.apiUtil)
+        }
+      })
+  }
+}
+package com.example.upieczona.topappbar
+
+import android.app.Activity
+import android.util.Log
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
+import com.example.upieczona.R
+import com.example.upieczona.mainscreen.MainPageState
+import com.example.upieczona.staticobjects.MaterialsUtils
+import com.example.upieczona.viewmodels.MainViewModel
+import kotlinx.coroutines.delay
+
+@Composable
+fun TopAppBarUpieczona(
+  onUpieczonaClick: () -> Unit,
+  onSearchIconClick: () -> Unit,
+  navController: NavHostController,
+  mainViewModel: MainViewModel
+) {
+  var shineAlpha by remember {
+    mutableStateOf(1f)
+  }
+  LaunchedEffect(Unit) {
+    val waitDuration = 100L
+    delay(waitDuration)
+    shineAlpha = 1f
+  }
+
+  val searchWidgetState by mainViewModel.searchWidgetState
+  val pageStateVal by mainViewModel.pageState
+
+  when (searchWidgetState) {
+    WidgetState.CLOSED -> {
+      TopBarDefault(
+        onClickUpieczona = onUpieczonaClick,
+        onSearchIconClick = { mainViewModel.updateSearchWidgetState(newValue = WidgetState.OPEN) },
+        navController = navController,
+        isOnMainScreen = true,
+        pageStateVal = pageStateVal
+      )
+    }
+    WidgetState.OPEN -> {
+      TopBarSearch(
+        onClickUpieczona = { },
+        onClearIconClick = {},
+        onSearchIconClick = {},
+        navController = navController,
+        isOnMainScreen = true
+      )
+    }
+  }
+
+}
+
+@Composable
+@OptIn(ExperimentalMaterial3Api::class)
+fun TopBarSearch(
+  onClickUpieczona: () -> Unit,
+  onSearchIconClick: () -> Unit,
+  onClearIconClick: () -> Unit,
+  navController: NavHostController,
+  isOnMainScreen: Boolean
+) {
+  TopAppBar(
+    title = {
+      TextField(
+        value = "www",
+        onValueChange = {
+
+        },
+        colors = TextFieldDefaults.textFieldColors(
+          containerColor = MaterialsUtils.colorPinkMain
+        ),
+        modifier = Modifier.fillMaxSize(),
+        trailingIcon = {
+          ClearIconButton(onClearIconClick = onClearIconClick)
+        },
+        leadingIcon = {
+          SearchButton(onSearchIconClick = onSearchIconClick)
+        }
+      )
+    },
+    colors = TopAppBarDefaults.smallTopAppBarColors(
+      containerColor = MaterialsUtils.colorPinkMain
+    )
+  )
+}
+
+@Composable
+@OptIn(ExperimentalMaterial3Api::class)
+fun TopBarDefault(
+  onClickUpieczona: () -> Unit,
+  onSearchIconClick: () -> Unit,
+  navController: NavHostController,
+  isOnMainScreen: Boolean,
+  pageStateVal: MainPageState
+) {
+  TopAppBar(
+    title = {
+      Text(
+        text = stringResource(id = R.string.app_name),
+        fontFamily = MaterialTheme.typography.titleLarge.fontFamily,
+        modifier = Modifier
+          .fillMaxSize()
+          .wrapContentSize(Alignment.Center)
+          .clickable {
+            onClickUpieczona()
+          }
+      )
+    },
+    colors = TopAppBarDefaults.smallTopAppBarColors(
+      containerColor = MaterialsUtils.colorPinkMain
+    ),
+    navigationIcon = {
+      BackIconButton(navController = navController, pageStateVal = pageStateVal)
+    },
+    actions = {
+      SearchIconButton(onSearchIconClick = onSearchIconClick)
+    }
+  )
+}
+
+@Composable
+fun SearchIconButton(
+  onSearchIconClick: () -> Unit
+) {
+  IconButton(onClick = {
+    onSearchIconClick()
+  }) {
+    Icon(Icons.Default.Search, contentDescription = null)
+  }
+}
+
+@Composable
+fun SearchButton(
+  onSearchIconClick: () -> Unit
+) {
+  IconButton(onClick = {
+    onSearchIconClick()
+  }) {
+    Icon(Icons.Default.Search, contentDescription = null)
+  }
+}
+
+@Composable
+fun ClearIconButton(
+  onClearIconClick: () -> Unit
+) {
+  IconButton(onClick = {
+    onClearIconClick()
+  }) {
+    Icon(Icons.Default.Clear, contentDescription = null)
+  }
+}
+
+@Composable
+fun BackIconButton(
+  navController: NavHostController,
+  pageStateVal: MainPageState
+) {
+  val context = LocalContext.current
+
+  Log.d("test1", pageStateVal.name)
+
+  IconButton(onClick = {
+    when (pageStateVal) {
+      MainPageState.DEFAULT -> {
+
+      }
+      MainPageState.UPIECZONA_CLICKED -> {
+        (context as? Activity)?.onBackPressed()
+      }
+      MainPageState.FAVORITE, MainPageState.FILTER_PAGE -> {
+        navController.navigateUp()
+      }
+    }
+  }) {
+    Icon(Icons.Default.ArrowBack, contentDescription = null)
+  }
+}
+
+@Preview
+@Composable
+fun testTopBarSearch() {
+  val navController = rememberNavController()
+  TopBarSearch(
+    onClickUpieczona = { },
+    onClearIconClick = {},
+    onSearchIconClick = {},
+    navController = navController,
+    isOnMainScreen = true
+  )
+}
+package com.example.upieczona.viewmodels
+
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.ViewModel
+import com.example.upieczona.mainscreen.MainPageState
+import com.example.upieczona.topappbar.WidgetState
+
+class MainViewModel : ViewModel() {
+  private val _searchWidgetState: MutableState<WidgetState> =
+    mutableStateOf(value = WidgetState.CLOSED)
+  val searchWidgetState: State<WidgetState> = _searchWidgetState
+
+  fun updateSearchWidgetState(newValue: WidgetState) {
+    _searchWidgetState.value = newValue
+  }
+
+  private val _pageState: MutableState<MainPageState> =
+    mutableStateOf(value = MainPageState.DEFAULT)
+  var pageState: State<MainPageState> = _pageState
+
+  fun updatePageState(newValue: MainPageState) {
+    _pageState.value = newValue
+  }
+
+}
+
+chciałem zrobić tak , że Gdy jestem w favoritePage  i klikne backArrow to wykona się to z TopAppBar

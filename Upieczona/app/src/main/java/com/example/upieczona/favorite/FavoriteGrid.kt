@@ -27,7 +27,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-<<<<<<< HEAD
 import androidx.compose.ui.res.painterResource
 =======
 >>>>>>> 84b7352ef9f1230ad16ba355cf254e03133d2ac0
