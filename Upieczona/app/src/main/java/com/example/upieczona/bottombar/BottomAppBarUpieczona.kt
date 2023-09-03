@@ -1,14 +1,19 @@
 package com.example.upieczona.bottombar
 
+<<<<<<< HEAD
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+=======
+import androidx.compose.foundation.layout.*
+>>>>>>> 84b7352ef9f1230ad16ba355cf254e03133d2ac0
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Favorite
+<<<<<<< HEAD
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -39,6 +44,30 @@ fun BottomBar(navController: NavController, upieczonaViewModel: UpieczonaViewMod
   var dialogOpen by remember { mutableStateOf(false) }
   var selectedItemsMap by remember { mutableStateOf(mutableMapOf<Int, Int>()) }
   val categoriesState by upieczonaViewModel.tagsUpieczona.collectAsState()
+=======
+import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+import com.example.upieczona.staticobjects.MaterialsUtils
+import com.example.upieczona.R
+
+@Composable
+fun BottomAppBarUpieczona(navController: NavController) {
+  BottomBar(navController)
+}
+
+@Composable
+fun BottomBar(navController: NavController) {
+>>>>>>> 84b7352ef9f1230ad16ba355cf254e03133d2ac0
   BottomAppBar(
     modifier = Modifier.height(75.dp), actions = {
       Column(
@@ -46,8 +75,14 @@ fun BottomBar(navController: NavController, upieczonaViewModel: UpieczonaViewMod
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
       ) {
+<<<<<<< HEAD
         Row(modifier = Modifier.padding(10.dp)) {
           FloatingActionButton(shape = RoundedCornerShape(100),
+=======
+        Row() {
+          FloatingActionButton(
+            shape = RoundedCornerShape(100),
+>>>>>>> 84b7352ef9f1230ad16ba355cf254e03133d2ac0
             containerColor = MaterialsUtils.colorPink,
             onClick = {
               navController.navigate("FavoritePage")
@@ -58,9 +93,16 @@ fun BottomBar(navController: NavController, upieczonaViewModel: UpieczonaViewMod
               tint = MaterialsUtils.colorRed
             )
           }
+<<<<<<< HEAD
           FloatingActionButton(onClick = {
             dialogOpen = true
           }) {
+=======
+          FloatingActionButton(
+            onClick = {
+
+            }) {
+>>>>>>> 84b7352ef9f1230ad16ba355cf254e03133d2ac0
             Icon(
               painter = painterResource(id = R.drawable.baseline_filter_alt_24),
               contentDescription = null
@@ -70,6 +112,7 @@ fun BottomBar(navController: NavController, upieczonaViewModel: UpieczonaViewMod
       }
     }, containerColor = MaterialsUtils.colorPinkMain
   )
+<<<<<<< HEAD
   if (dialogOpen) {
     Dialog(
       onDismissRequest = {
@@ -158,11 +201,17 @@ fun BottomBar(navController: NavController, upieczonaViewModel: UpieczonaViewMod
 
 fun fetchTags(upieczonaViewModel: UpieczonaViewModel) {
   upieczonaViewModel.fetchTags()
+=======
+>>>>>>> 84b7352ef9f1230ad16ba355cf254e03133d2ac0
 }
 
 @Preview(showBackground = true)
 @Composable
 fun BottomAppBarUpieczonaPreview() {
   val navController = rememberNavController()
+<<<<<<< HEAD
   BottomAppBarUpieczona(navController, ApiUtils.apiUtil)
+=======
+  BottomAppBarUpieczona(navController)
+>>>>>>> 84b7352ef9f1230ad16ba355cf254e03133d2ac0
 }

@@ -1,5 +1,9 @@
 package com.example.upieczona.contentview
 
+<<<<<<< HEAD
+=======
+import android.util.Log
+>>>>>>> 84b7352ef9f1230ad16ba355cf254e03133d2ac0
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -40,20 +44,36 @@ import com.example.upieczona.viewmodels.UpieczonaViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ContentViewUpieczona(
+<<<<<<< HEAD
   postIndex: Int?,
   upieczonaViewModel: UpieczonaViewModel,
   navController: NavHostController,
   mainViewModel: MainViewModel
+=======
+  postIndex: Int?, upieczonaViewModel: UpieczonaViewModel, navController: NavHostController
+>>>>>>> 84b7352ef9f1230ad16ba355cf254e03133d2ac0
 ) {
   val loc = LocalContext.current
   val favoriteManager = remember { FavoriteManager(loc) }
 
+<<<<<<< HEAD
 
 /*  LaunchedEffect(mainPageState) {
     if (mainPageState == MainPageState.UPIECZONA_CLICKED) {
       navController.navigate(Destination.MainPageOfUpieczona.route)
     }
   }*/
+=======
+  var mainPageState by remember {
+    mutableStateOf(MainPageState.Default)
+  }
+
+  LaunchedEffect(mainPageState) {
+    if (mainPageState == MainPageState.UpieczonaClicked) {
+      navController.navigate(Destination.MainPageOfUpieczona.route)
+    }
+  }
+>>>>>>> 84b7352ef9f1230ad16ba355cf254e03133d2ac0
 
   val postDetails = remember(upieczonaViewModel.allPosts) {
     postIndex?.let { index ->
@@ -63,6 +83,7 @@ fun ContentViewUpieczona(
 
   val isFavorite = favoriteManager.isPostFavorite(postIndex!!)
   val favoritePostsState = remember { mutableStateOf(favoriteManager.getFavoritePosts()) }
+<<<<<<< HEAD
   mainViewModel.updatePageState(MainPageState.CONTENT_VIEW)
   Scaffold(
     topBar = {
@@ -75,6 +96,15 @@ fun ContentViewUpieczona(
         pageInfo = mainViewModel.pageState.value,
         mainViewModel = MainViewModel(),
       )
+=======
+  Scaffold(
+    topBar = {
+      if (mainPageState == MainPageState.Default) {
+        TopAppBarUpieczona(onUpieczonaClick = {
+          mainPageState = MainPageState.UpieczonaClicked
+        }, navController = navController)
+      }
+>>>>>>> 84b7352ef9f1230ad16ba355cf254e03133d2ac0
     },
   ) { padding ->
     Column(
@@ -185,8 +215,14 @@ fun ContentViewUpieczona(
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ImagePager(imageUrlsSize: Int, imageUrls: List<String>) {
+<<<<<<< HEAD
   val pageState = rememberPagerState(pageCount = { imageUrls.size }) // Provide source of truth
   HorizontalPager(
+=======
+  val pageState = rememberPagerState()
+  HorizontalPager(
+    pageCount = imageUrls.size,
+>>>>>>> 84b7352ef9f1230ad16ba355cf254e03133d2ac0
     state = pageState
   ) { pageIndex ->
     val imageUrl = imageUrls[pageIndex]
@@ -226,4 +262,7 @@ fun ImagePager(imageUrlsSize: Int, imageUrls: List<String>) {
   }
 }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 84b7352ef9f1230ad16ba355cf254e03133d2ac0

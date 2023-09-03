@@ -1,0 +1,142 @@
+@OptIn(ExperimentalMaterial3Api::class)
+@Preview(showBackground = true)
+@Composable
+fun previewContentView() {
+  val navController = rememberNavController()
+  val extractShopListUpieczona = mutableListOf("", "", "", "")
+  val listFromTwoTitles = mutableListOf("", "", "", "")
+  val listFromTwoTitles2 = mutableListOf("", "", "", "")
+  val checkedState = remember { mutableStateOf(false) }
+  val decorationText =
+    if (checkedState.value) TextDecoration.LineThrough else TextDecoration.None
+
+  @Composable
+  fun FetchTitleWhenOneTitle1() {
+    Text(
+      modifier = Modifier.padding(5.dp),
+      fontFamily = MaterialTheme.typography.headlineSmall.fontFamily,
+      text = "Test dla jednego tytułu",
+      fontSize = 20.sp,
+      fontWeight = FontWeight.Bold,
+      textAlign = TextAlign.Center
+    )
+    extractShopListUpieczona.forEach { item ->
+
+      Row(verticalAlignment = Alignment.CenterVertically) {
+        Checkbox(
+          checked = checkedState.value,
+          onCheckedChange = {
+            checkedState.value = it
+          }
+        )
+        Text(
+          modifier = Modifier.padding(start = 8.dp, end = 8.dp),
+          fontFamily = MaterialTheme.typography.headlineSmall.fontFamily,
+          text = item,
+          fontSize = 14.sp,
+          textAlign = TextAlign.Start,
+          textDecoration = decorationText
+        )
+      }
+    }
+  }
+
+  @Composable
+  fun FetchTitleWhenTwoTitle() {
+    Text(
+      modifier = Modifier.padding(5.dp),
+      fontFamily = MaterialTheme.typography.headlineSmall.fontFamily,
+      text = "Test dla Dwóch tytułów Pierwszy",
+      fontSize = 20.sp,
+      fontWeight = FontWeight.Bold,
+      textAlign = TextAlign.Center
+    )
+
+    Text(
+      modifier = Modifier.padding(8.dp),
+      fontFamily = MaterialTheme.typography.headlineSmall.fontFamily,
+      text = listFromTwoTitles.toString(),
+      fontSize = 14.sp,
+      textAlign = TextAlign.Center
+    )
+
+
+    Text(
+      modifier = Modifier.padding(5.dp),
+      fontFamily = MaterialTheme.typography.headlineSmall.fontFamily,
+      text = "Test dla Dwóch tytułów Drugi",
+      fontSize = 20.sp,
+      fontWeight = FontWeight.Bold,
+      textAlign = TextAlign.Center
+    )
+
+    Text(
+      modifier = Modifier.padding(8.dp),
+      fontFamily = MaterialTheme.typography.headlineSmall.fontFamily,
+      text = listFromTwoTitles2.toString(),
+      fontSize = 14.sp,
+      textAlign = TextAlign.Center
+    )
+  }
+
+  Scaffold(
+    topBar = {
+      TopAppBarUpieczona(onUpieczonaClick = {}, navController = navController)
+    },
+    content = { padding ->
+      Column(
+        modifier = Modifier.padding(padding)
+      ) {
+
+
+        @Composable
+        fun FetchTitle() {
+          when (1) {
+            1 -> FetchTitleWhenOneTitle1()
+            2 -> FetchTitleWhenTwoTitle()
+          }
+        }
+
+        LazyColumn(
+          modifier = Modifier.fillMaxSize(),
+          horizontalAlignment = Alignment.CenterHorizontally,
+          verticalArrangement = Arrangement.Top
+        ) {
+          item {
+            Divider()
+
+            ImagePager(
+              1,
+              listOf("", "")
+            )
+
+            Column(
+              modifier = Modifier
+                .fillMaxSize()
+                .padding(top = 15.dp),
+              horizontalAlignment = Alignment.CenterHorizontally,
+              verticalArrangement = Arrangement.Center
+            ) {
+              Text(
+                modifier = Modifier.padding(5.dp),
+                fontFamily = MaterialTheme.typography.headlineLarge.fontFamily,
+                text = "Przepis",
+                fontSize = 25.sp,
+                textAlign = TextAlign.Center
+              )
+              Column(
+                modifier = Modifier
+                  .fillMaxSize()
+                  .padding(top = 15.dp),
+                horizontalAlignment = Alignment.Start,
+                verticalArrangement = Arrangement.Center
+              ) {
+                FetchTitle()
+              }
+            }
+          }
+        }
+      }
+    }
+  )
+}

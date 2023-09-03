@@ -1,8 +1,11 @@
 package com.example.upieczona.contentview
 
 import android.util.Log
+<<<<<<< HEAD
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+=======
+>>>>>>> 84b7352ef9f1230ad16ba355cf254e03133d2ac0
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
@@ -60,6 +63,7 @@ fun FetchTitleWhenTwoTitle(
     ) {
 
       ingredientStates.forEachIndexed { index, isCheckedState ->
+<<<<<<< HEAD
         Box(
           modifier = Modifier.clickable {
             isCheckedState.value = !isCheckedState.value
@@ -80,6 +84,23 @@ fun FetchTitleWhenTwoTitle(
               textDecoration = if (isCheckedState.value) TextDecoration.LineThrough else TextDecoration.None
             )
           }
+=======
+        Row(verticalAlignment = Alignment.CenterVertically) {
+          Checkbox(
+            checked = isCheckedState.value,
+            onCheckedChange = {
+              isCheckedState.value = it
+            }
+          )
+          Text(
+            modifier = Modifier.padding(start = 8.dp, end = 8.dp),
+            fontFamily = MaterialTheme.typography.headlineSmall.fontFamily,
+            text = firstIngredients[index],
+            fontSize = 14.sp,
+            textAlign = TextAlign.Start,
+            textDecoration = if (isCheckedState.value) TextDecoration.LineThrough else TextDecoration.None
+          )
+>>>>>>> 84b7352ef9f1230ad16ba355cf254e03133d2ac0
         }
       }
     }
@@ -92,8 +113,12 @@ fun FetchTitleWhenTwoTitle(
      ).toString()
    )*/
 
+<<<<<<< HEAD
   val recipeTitleInstruction =
     upieczonaViewModel.formatInstructionsTitle(postDetails.content.rendered)
+=======
+  val recipeTitleInstruction = upieczonaViewModel.formatInstructionsTitle(postDetails.content.rendered)
+>>>>>>> 84b7352ef9f1230ad16ba355cf254e03133d2ac0
   val up = upieczonaViewModel.fetchRecipe1(postDetails.content.rendered)
 
   val emTitle = upieczonaViewModel.formatInstructionsTitleEM(postDetails.content.rendered)
@@ -134,4 +159,9 @@ fun FetchTitleWhenTwoTitle(
       )
     }
   }
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> 84b7352ef9f1230ad16ba355cf254e03133d2ac0
 }

@@ -80,11 +80,20 @@ dependencies {
   implementation("com.google.code.gson:gson:2.10.1")
   implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1")
 
+<<<<<<< HEAD
   implementation("androidx.navigation:navigation-compose:2.6.0")
   implementation("com.google.accompanist:accompanist-pager:0.23.1")
   implementation("com.google.accompanist:accompanist-pager-indicators:0.23.1")
 
   implementation("androidx.preference:preference-ktx:1.2.1")
   implementation("org.jsoup:jsoup:1.15.3")
+=======
+    implementation("androidx.navigation:navigation-compose:2.6.0")
+    implementation("com.google.accompanist:accompanist-pager:0.23.1")
+    implementation("com.google.accompanist:accompanist-pager-indicators:0.23.1")
+
+    implementation("androidx.preference:preference-ktx:1.2.1")
+    implementation ("org.jsoup:jsoup:1.14.3")
+>>>>>>> 84b7352ef9f1230ad16ba355cf254e03133d2ac0
 
 }

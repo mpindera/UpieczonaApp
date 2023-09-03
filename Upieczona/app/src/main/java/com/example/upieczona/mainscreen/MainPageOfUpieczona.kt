@@ -105,8 +105,12 @@ fun MainPageOfUpieczona(
       LazyGridOfPosts(
         allPosts = post,
         scrollState = scrollState,
+<<<<<<< HEAD
         navController = navController,
         upieczonaViewModel = upieczonaViewModel
+=======
+        navController = navController
+>>>>>>> 84b7352ef9f1230ad16ba355cf254e03133d2ac0
       )
     }
   }
