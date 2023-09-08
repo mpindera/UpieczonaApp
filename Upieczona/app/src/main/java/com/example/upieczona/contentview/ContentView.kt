@@ -1,9 +1,5 @@
 package com.example.upieczona.contentview
 
-<<<<<<< HEAD
-=======
-import android.util.Log
->>>>>>> 84b7352ef9f1230ad16ba355cf254e03133d2ac0
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -38,53 +34,32 @@ import com.example.upieczona.destination.Destination
 import com.example.upieczona.favorite.FavoriteManager
 import com.example.upieczona.mainscreen.MainPageState
 import com.example.upieczona.topappbar.TopAppBarUpieczona
-import com.example.upieczona.viewmodels.MainViewModel
+import com.example.upieczona.viewmodels.UpieczonaMainViewModel
 import com.example.upieczona.viewmodels.UpieczonaViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ContentViewUpieczona(
-<<<<<<< HEAD
   postIndex: Int?,
   upieczonaViewModel: UpieczonaViewModel,
   navController: NavHostController,
-  mainViewModel: MainViewModel
-=======
-  postIndex: Int?, upieczonaViewModel: UpieczonaViewModel, navController: NavHostController
->>>>>>> 84b7352ef9f1230ad16ba355cf254e03133d2ac0
+  upieczonaMainViewModel: UpieczonaMainViewModel
 ) {
   val loc = LocalContext.current
   val favoriteManager = remember { FavoriteManager(loc) }
-
-<<<<<<< HEAD
-
-/*  LaunchedEffect(mainPageState) {
-    if (mainPageState == MainPageState.UPIECZONA_CLICKED) {
-      navController.navigate(Destination.MainPageOfUpieczona.route)
-    }
-  }*/
-=======
-  var mainPageState by remember {
-    mutableStateOf(MainPageState.Default)
-  }
-
-  LaunchedEffect(mainPageState) {
-    if (mainPageState == MainPageState.UpieczonaClicked) {
-      navController.navigate(Destination.MainPageOfUpieczona.route)
-    }
-  }
->>>>>>> 84b7352ef9f1230ad16ba355cf254e03133d2ac0
 
   val postDetails = remember(upieczonaViewModel.allPosts) {
     postIndex?.let { index ->
       upieczonaViewModel.allPosts.value.find { it.id == index }
     }
   }
+  val isFavorite = remember { mutableStateOf(favoriteManager.isPostFavorite(postIndex!!)) }
 
-  val isFavorite = favoriteManager.isPostFavorite(postIndex!!)
-  val favoritePostsState = remember { mutableStateOf(favoriteManager.getFavoritePosts()) }
-<<<<<<< HEAD
-  mainViewModel.updatePageState(MainPageState.CONTENT_VIEW)
+  val updateFavoriteState: () -> Unit = {
+    isFavorite.value = favoriteManager.isPostFavorite(postIndex!!)
+  }
+
+  upieczonaMainViewModel.updatePageState(MainPageState.CONTENT_VIEW)
   Scaffold(
     topBar = {
       TopAppBarUpieczona(
@@ -93,18 +68,9 @@ fun ContentViewUpieczona(
         },
         onSearchIconClick = {},
         navController = navController,
-        pageInfo = mainViewModel.pageState.value,
-        mainViewModel = MainViewModel(),
+        pageInfo = upieczonaMainViewModel.pageState.value,
+        upieczonaMainViewModel = UpieczonaMainViewModel(),
       )
-=======
-  Scaffold(
-    topBar = {
-      if (mainPageState == MainPageState.Default) {
-        TopAppBarUpieczona(onUpieczonaClick = {
-          mainPageState = MainPageState.UpieczonaClicked
-        }, navController = navController)
-      }
->>>>>>> 84b7352ef9f1230ad16ba355cf254e03133d2ac0
     },
   ) { padding ->
     Column(
@@ -113,11 +79,11 @@ fun ContentViewUpieczona(
       if (postDetails != null) {
 
         val urlsListPhotosUpieczona = remember(postDetails) {
-          upieczonaViewModel.extractPhotosUrls(postDetails.content.rendered)
+          upieczonaMainViewModel.extractPhotosUrls(postDetails.content.rendered)
         }
 
         val ingredientTitleUpieczona = remember(postDetails) {
-          upieczonaViewModel.getCachedIngredients(postDetails.content.rendered)
+          upieczonaMainViewModel.getCachedIngredients(postDetails.content.rendered)
         }
 
         val decodedTextFromTitleUpieczona = remember(postDetails) {
@@ -133,11 +99,19 @@ fun ContentViewUpieczona(
         ) {
           item {
             Divider()
-            Box() {
+
+            ImagePager(
+              urlsListPhotosUpieczona.size,
+              urlsListPhotosUpieczona
+            )
+            Row(
+              modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.Start)
+            ) {
               IconButton(
                 onClick = {
-
-                  if (isFavorite) {
+                  if (isFavorite.value) {
                     favoriteManager.removeFavoritePost(postDetails.id)
                   } else {
                     favoriteManager.addFavoritePost(
@@ -146,39 +120,27 @@ fun ContentViewUpieczona(
                       postImageUrl = urlsListPhotosUpieczona[0]
                     )
                   }
-                  favoritePostsState.value = favoriteManager.getFavoritePosts()
+                  updateFavoriteState()
                 },
               ) {
-                val icon = if (isFavorite) {
+                val icon = if (isFavorite.value) {
                   Icons.Default.Favorite
                 } else {
                   Icons.Default.FavoriteBorder
                 }
                 Icon(icon, contentDescription = null)
               }
-            }
-            LaunchedEffect(isFavorite) {
-              favoritePostsState.value = favoriteManager.getFavoritePosts()
-            }
-            ImagePager(
-              urlsListPhotosUpieczona.size,
-              urlsListPhotosUpieczona
-            )
 
-            Column(
-              modifier = Modifier
-                .fillMaxSize()
-                .padding(top = 15.dp),
-              horizontalAlignment = Alignment.CenterHorizontally,
-              verticalArrangement = Arrangement.Center
-            ) {
               Text(
-                modifier = Modifier.padding(5.dp),
+                modifier = Modifier.padding(top = 7.dp,bottom = 5.dp),
                 fontFamily = MaterialTheme.typography.headlineLarge.fontFamily,
                 text = decodedTextFromTitleUpieczona,
                 fontSize = 20.sp,
                 textAlign = TextAlign.Center
               )
+
+            }
+
               Column(
                 modifier = Modifier
                   .fillMaxSize()
@@ -186,8 +148,12 @@ fun ContentViewUpieczona(
                 horizontalAlignment = Alignment.Start,
                 verticalArrangement = Arrangement.Center
               ) {
-                FetchTitleWhenTwoTitle(ingredientTitleUpieczona, upieczonaViewModel, postDetails)
-              }
+                FetchTitleWhenTwoTitle(
+                  ingredientTitleUpieczona,
+                  upieczonaMainViewModel,
+                  postDetails
+                )
+
             }
           }
         }
@@ -200,7 +166,7 @@ fun ContentViewUpieczona(
           horizontalAlignment = Alignment.CenterHorizontally
         ) {
           Text(
-            text = "Post not found",
+            text = "Post nie został znaleziony",
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.error
           )
@@ -215,14 +181,8 @@ fun ContentViewUpieczona(
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ImagePager(imageUrlsSize: Int, imageUrls: List<String>) {
-<<<<<<< HEAD
   val pageState = rememberPagerState(pageCount = { imageUrls.size }) // Provide source of truth
   HorizontalPager(
-=======
-  val pageState = rememberPagerState()
-  HorizontalPager(
-    pageCount = imageUrls.size,
->>>>>>> 84b7352ef9f1230ad16ba355cf254e03133d2ac0
     state = pageState
   ) { pageIndex ->
     val imageUrl = imageUrls[pageIndex]
@@ -262,7 +222,4 @@ fun ImagePager(imageUrlsSize: Int, imageUrls: List<String>) {
   }
 }
 
-<<<<<<< HEAD
 
-=======
->>>>>>> 84b7352ef9f1230ad16ba355cf254e03133d2ac0

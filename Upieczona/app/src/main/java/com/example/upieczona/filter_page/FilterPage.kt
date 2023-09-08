@@ -33,20 +33,20 @@ import com.example.upieczona.favorite.FavoriteManager
 import com.example.upieczona.mainscreen.MainPageState
 import com.example.upieczona.staticobjects.ApiUtils
 import com.example.upieczona.topappbar.TopAppBarUpieczona
-import com.example.upieczona.viewmodels.MainViewModel
+import com.example.upieczona.viewmodels.UpieczonaMainViewModel
 import com.example.upieczona.viewmodels.UpieczonaViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FilterPage(
   navController: NavHostController,
-  upieczonaViewModel: UpieczonaViewModel,
   dataMap: String?,
-  mainViewModel: MainViewModel
+  upieczonaApiViewModel: UpieczonaViewModel,
+  upieczonaMainViewModel: UpieczonaMainViewModel
 ) {
   val scrollState by remember { mutableStateOf(LazyGridState(0)) }
 
-  mainViewModel.updatePageState(MainPageState.FILTER_PAGE)
+  upieczonaMainViewModel.updatePageState(MainPageState.FILTER_PAGE)
 
   Scaffold(
     topBar = {
@@ -56,8 +56,8 @@ fun FilterPage(
         },
         onSearchIconClick = {},
         navController = navController,
-        pageInfo = mainViewModel.pageState.value,
-        mainViewModel = MainViewModel()
+        pageInfo = upieczonaMainViewModel.pageState.value,
+        upieczonaMainViewModel = UpieczonaMainViewModel()
       )
     }, content = { padding ->
       Column(
@@ -67,11 +67,12 @@ fun FilterPage(
           scrollState = scrollState,
           navController = navController,
           filterMap = dataMap,
-          upieczonaViewModel = upieczonaViewModel
+          upieczonaApiViewModel = upieczonaApiViewModel,
+          upieczonaMainViewModel= upieczonaMainViewModel
         )
       }
     }, bottomBar = {
-      BottomAppBarUpieczona(navController = navController, upieczonaViewModel = ApiUtils.apiUtil)
+      BottomAppBarUpieczona(navController = navController, upieczonaApiViewModel = ApiUtils.apiUtil, upieczonaMainViewModel = UpieczonaMainViewModel())
     })
 }
 
@@ -80,17 +81,18 @@ fun FetchDataFromFilter(
   scrollState: LazyGridState,
   navController: NavHostController,
   filterMap: String?,
-  upieczonaViewModel: UpieczonaViewModel,
+  upieczonaApiViewModel: UpieczonaViewModel,
+  upieczonaMainViewModel: UpieczonaMainViewModel,
 ) {
   val loc = LocalContext.current
   val favoriteManager = remember { FavoriteManager(loc) }
   val favoritePostsState = remember { mutableStateOf(favoriteManager.getFavoritePosts()) }
-  val allPosts: State<List<PostsOfUpieczonaItemDto>> = upieczonaViewModel.allPosts
+  val allPosts: State<List<PostsOfUpieczonaItemDto>> = upieczonaApiViewModel.allPosts
 
   LazyVerticalGrid(columns = GridCells.Fixed(2), state = scrollState, content = {
     val filterTags: List<Int> =
       filterMap?.split(", ")?.mapNotNull { it.toIntOrNull() } ?: emptyList()
-    val filteredPosts = upieczonaViewModel.searchItemsFromTags(allPosts.value, filterTags)
+    val filteredPosts = upieczonaMainViewModel.searchItemsFromTags(allPosts.value, filterTags)
 
 
     items(filteredPosts.size) { index ->

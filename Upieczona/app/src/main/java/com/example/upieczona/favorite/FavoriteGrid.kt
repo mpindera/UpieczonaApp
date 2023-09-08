@@ -1,6 +1,5 @@
 package com.example.upieczona.favorite
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -28,19 +27,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-=======
->>>>>>> 84b7352ef9f1230ad16ba355cf254e03133d2ac0
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.text.HtmlCompat
 import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
+import coil.request.CachePolicy
 import coil.request.ImageRequest
-<<<<<<< HEAD
 import com.example.upieczona.R
-=======
->>>>>>> 84b7352ef9f1230ad16ba355cf254e03133d2ac0
 import com.example.upieczona.dtoposts.PostsOfUpieczonaItemDto
 import com.example.upieczona.viewmodels.UpieczonaViewModel
 
@@ -56,25 +51,27 @@ fun FavoriteGrid(
   val scrollState by remember { mutableStateOf(LazyGridState(0)) }
   val allPosts: State<List<PostsOfUpieczonaItemDto>> = upieczonaViewModel.allPosts
   val sortedFavoritePosts = favoritePostsState.value.entries.sortedBy { it.key }
-<<<<<<< HEAD
 
   if (favoritePosts.isEmpty()) {
-    Column(verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
-      Box(modifier = Modifier.fillMaxSize()) {
-        Box(modifier = Modifier.align(Alignment.CenterStart)) {
+    Column(
+      verticalArrangement = Arrangement.Center,
+      horizontalAlignment = Alignment.CenterHorizontally,
+      modifier = Modifier.padding(50.dp)
+    ) {
+      Box(modifier = Modifier
+        .padding(start = 30.dp, end = 30.dp)
+        .fillMaxSize()) {
+        Box(modifier = Modifier
+          .size(80.dp)
+          .align(Alignment.CenterStart)) {
           Image(painter = painterResource(id = R.drawable.rotatingimage), contentDescription = null)
         }
-        Box(modifier = Modifier.align(Alignment.CenterEnd)) {
+        Box(modifier = Modifier
+          .size(80.dp)
+          .align(Alignment.CenterEnd)) {
           Image(painter = painterResource(id = R.drawable.rotatingimage), contentDescription = null)
         }
       }
-=======
-  Log.d("cacaTest","sec - ${FavoriteManagerSingleton.getMap()}")
-
-  if (favoritePosts.isEmpty()) {
-    Column {
-      Text(text = "You don't have any favorites")
->>>>>>> 84b7352ef9f1230ad16ba355cf254e03133d2ac0
     }
   } else {
     LazyVerticalGrid(
@@ -82,10 +79,6 @@ fun FavoriteGrid(
       state = scrollState
     ) {
       items(sortedFavoritePosts.size) { index ->
-<<<<<<< HEAD
-=======
-
->>>>>>> 84b7352ef9f1230ad16ba355cf254e03133d2ac0
         val decodedTextPostName = HtmlCompat.fromHtml(
           sortedFavoritePosts[index].value.postName,
           HtmlCompat.FROM_HTML_MODE_LEGACY
@@ -94,7 +87,7 @@ fun FavoriteGrid(
         Box(
           modifier = Modifier
             .padding(8.dp)
-            .aspectRatio(0.5f)
+            .aspectRatio(0.4f)
             .clickable {
               val post =
                 allPosts.value.find { it.id == sortedFavoritePosts[index].key }
@@ -121,27 +114,7 @@ fun FavoriteGrid(
           ) {
 
             // First Section Image
-            Box(
-              modifier = Modifier
-                .weight(1f)
-                .fillMaxWidth()
-                .padding(top = 20.dp, start = 10.dp, end = 10.dp, bottom = 25.dp)
-                .background(Color.White), contentAlignment = Alignment.Center
-            ) {
-              val painter = rememberAsyncImagePainter(
-                ImageRequest.Builder(LocalContext.current)
-                  .data(data = sortedFavoritePosts[index].value.postImageUrl)
-                  .apply {
-                    crossfade(true)
-                  }.build()
-              )
-              Image(
-                painter = painter,
-                contentDescription = null,
-                contentScale = ContentScale.Crop,
-                modifier = Modifier.fillMaxSize()
-              )
-            }
+            PhotoSection(sortedFavoritePosts,index)
 
             // favorite Section
             IconButton(
@@ -159,32 +132,17 @@ fun FavoriteGrid(
               },
               modifier = Modifier.align(Alignment.Start)
             ) {
-              val icon = if (favoriteManager.isPostFavorite(postId = sortedFavoritePosts[index].key)) {
-                Icons.Default.Favorite
-              } else {
-                Icons.Default.FavoriteBorder
-              }
+              val icon =
+                if (favoriteManager.isPostFavorite(postId = sortedFavoritePosts[index].key)) {
+                  Icons.Default.Favorite
+                } else {
+                  Icons.Default.FavoriteBorder
+                }
               Icon(icon, contentDescription = null)
             }
 
             // Second Section Text
-            Box(
-              modifier = Modifier
-                .weight(0.5f)
-                .fillMaxWidth()
-                .padding(start = 10.dp, end = 10.dp)
-                .clip(RoundedCornerShape(5.dp))
-                .background(Color.White), contentAlignment = Alignment.Center
-            ) {
-
-              Text(
-                fontFamily = MaterialTheme.typography.titleMedium.fontFamily,
-                textAlign = TextAlign.Center,
-                color = Color(0xFF000000),
-                text = decodedTextPostName,
-                fontSize = 14.sp
-              )
-            }
+            TextSection(decodedTextPostName)
           }
         }
       }
@@ -199,6 +157,55 @@ fun handleItemClick(
 ) {
   val allPosts: State<List<PostsOfUpieczonaItemDto>> = upieczonaViewModel.allPosts
   navController.navigate("Content/${allPosts.value[postIndex].id}")
+}
+
+@Composable
+fun PhotoSection(sortedFavoritePosts: List<Map.Entry<Int, FavoriteData>>, index: Int) {
+  Box(
+    modifier = Modifier
+      .height(250.dp)
+      .fillMaxWidth()
+      .padding()
+      .background(Color.White), contentAlignment = Alignment.Center
+  ) {
+    val painter = rememberAsyncImagePainter(
+      ImageRequest.Builder(LocalContext.current)
+        .data(data = sortedFavoritePosts[index].value.postImageUrl)
+        .apply {
+          crossfade(true)
+          memoryCachePolicy(CachePolicy.ENABLED)
+          diskCachePolicy(CachePolicy.ENABLED)
+        }
+        .build()
+    )
+    Image(
+      painter = painter,
+      contentDescription = null,
+      contentScale = ContentScale.Crop,
+      modifier = Modifier.fillMaxSize()
+    )
+  }
+}
+
+@Composable
+fun TextSection(decodedTextPostName: String) {
+  Box(
+    modifier = Modifier
+      .fillMaxWidth()
+      .padding(start = 10.dp, end = 10.dp)
+      .clip(RoundedCornerShape(5.dp))
+      .background(Color.White)
+      .sizeIn(maxHeight = 80.dp),
+    contentAlignment = Alignment.Center
+  ) {
+    Text(
+      fontFamily = MaterialTheme.typography.titleMedium.fontFamily,
+      textAlign = TextAlign.Center,
+      color = Color(0xFF000000),
+      text = decodedTextPostName,
+      fontSize = 13.sp
+    )
+  }
 }
 
 

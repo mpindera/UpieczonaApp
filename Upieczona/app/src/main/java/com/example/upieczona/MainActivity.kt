@@ -14,22 +14,16 @@ import androidx.navigation.navArgument
 import com.example.upieczona.contentview.ContentViewUpieczona
 import com.example.upieczona.destination.Destination
 import com.example.upieczona.favorite.FavoritePage
-<<<<<<< HEAD
 import com.example.upieczona.filter_page.FilterPage
-=======
->>>>>>> 84b7352ef9f1230ad16ba355cf254e03133d2ac0
 import com.example.upieczona.mainscreen.MainScreenUpieczona
 import com.example.upieczona.staticobjects.ApiUtils
 import com.example.upieczona.ui.theme.UpieczonaTheme
-import com.example.upieczona.viewmodels.MainViewModel
+import com.example.upieczona.viewmodels.UpieczonaMainViewModel
 
 class MainActivity : ComponentActivity() {
 
   override fun onCreate(savedInstanceState: Bundle?) {
-<<<<<<< HEAD
 
-=======
->>>>>>> 84b7352ef9f1230ad16ba355cf254e03133d2ac0
     super.onCreate(savedInstanceState)
     setContent {
       UpieczonaTheme {
@@ -47,11 +41,10 @@ fun NavigationAppHost(navController: NavHostController) {
     navController = navController,
     startDestination = Destination.HomePageOfUpieczona.route
   ) {
-<<<<<<< HEAD
     composable(Destination.HomePageOfUpieczona.route) {
       MainScreenUpieczona(
         navController,
-        mainViewModel = MainViewModel()
+        upieczonaMainViewModel = UpieczonaMainViewModel()
       )
     }
     composable(
@@ -63,14 +56,14 @@ fun NavigationAppHost(navController: NavHostController) {
         postIndex = postIndex,
         upieczonaViewModel = ApiUtils.apiUtil,
         navController = navController,
-        mainViewModel = MainViewModel()
+        upieczonaMainViewModel = UpieczonaMainViewModel()
       )
     }
     composable(Destination.MainPageOfUpieczona.route) {
-      MainScreenUpieczona(navController, mainViewModel = MainViewModel())
+      MainScreenUpieczona(navController, upieczonaMainViewModel = UpieczonaMainViewModel())
     }
     composable(Destination.FavoritePageOfUpieczona.route) {
-      FavoritePage(navController = navController, mainViewModel = MainViewModel())
+      FavoritePage(navController = navController, upieczonaMainViewModel = UpieczonaMainViewModel())
     }
     composable(
       Destination.FilterPageOfUpieczona.route,
@@ -80,28 +73,9 @@ fun NavigationAppHost(navController: NavHostController) {
       FilterPage(
         navController = navController,
         dataMap = map,
-        upieczonaViewModel = ApiUtils.apiUtil,
-        mainViewModel = MainViewModel()
+        upieczonaApiViewModel = ApiUtils.apiUtil,
+        upieczonaMainViewModel = UpieczonaMainViewModel()
       )
-=======
-    composable(Destination.HomePageOfUpieczona.route) { MainScreenUpieczona(navController) }
-    composable(
-      Destination.ContentPageOfUpieczona.route,
-      arguments = listOf(navArgument("postIndex") { type = NavType.IntType })
-    ) { backStackEntry ->
-      val postIndex = backStackEntry.arguments?.getInt("postIndex")
-      ContentViewUpieczona(
-        postIndex = postIndex,
-        upieczonaViewModel = ApiUtils.apiUtil,
-        navController = navController
-      )
-    }
-    composable(Destination.MainPageOfUpieczona.route) {
-      MainScreenUpieczona(navController)
-    }
-    composable(Destination.FavoritePageOfUpieczona.route) {
-      FavoritePage(navController = navController)
->>>>>>> 84b7352ef9f1230ad16ba355cf254e03133d2ac0
     }
   }
 }
