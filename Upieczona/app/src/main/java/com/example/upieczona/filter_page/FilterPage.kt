@@ -22,7 +22,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.text.HtmlCompat
 import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
@@ -32,6 +31,8 @@ import com.example.upieczona.dtoposts.PostsOfUpieczonaItemDto
 import com.example.upieczona.favorite.FavoriteManager
 import com.example.upieczona.mainscreen.MainPageState
 import com.example.upieczona.staticobjects.ApiUtils
+import com.example.upieczona.staticobjects.MaterialsUtils.decodeHtml
+import com.example.upieczona.staticobjects.MaterialsUtils.swipeToReturn
 import com.example.upieczona.topappbar.TopAppBarUpieczona
 import com.example.upieczona.viewmodels.UpieczonaMainViewModel
 import com.example.upieczona.viewmodels.UpieczonaViewModel
@@ -45,6 +46,7 @@ fun FilterPage(
   upieczonaMainViewModel: UpieczonaMainViewModel
 ) {
   val scrollState by remember { mutableStateOf(LazyGridState(0)) }
+  val isSwipedRight by remember { mutableStateOf(false) }
 
   upieczonaMainViewModel.updatePageState(MainPageState.FILTER_PAGE)
 
@@ -61,7 +63,7 @@ fun FilterPage(
       )
     }, content = { padding ->
       Column(
-        modifier = Modifier.padding(padding)
+        modifier = Modifier.padding(padding).swipeToReturn(isSwipedRight = isSwipedRight, navController = navController)
       ) {
         FetchDataFromFilter(
           scrollState = scrollState,
@@ -96,9 +98,7 @@ fun FetchDataFromFilter(
 
 
     items(filteredPosts.size) { index ->
-      val decodedTextPostName = HtmlCompat.fromHtml(
-        filteredPosts[index].title.rendered, HtmlCompat.FROM_HTML_MODE_LEGACY
-      ).toString()
+      val decodedTextPostName = filteredPosts[index].title.rendered.decodeHtml()
       val isFavorite = favoritePostsState.value.contains(filteredPosts[index].id)
 
       val imageUrl = filteredPosts[index].yoastHeadJson.ogImage?.getOrNull(0)?.url

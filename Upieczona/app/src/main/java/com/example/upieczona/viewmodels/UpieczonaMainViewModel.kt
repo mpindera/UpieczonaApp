@@ -1,8 +1,13 @@
 package com.example.upieczona.viewmodels
 
+import android.util.Log
+import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.core.text.HtmlCompat
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
 import com.example.upieczona.dtoposts.PostsOfUpieczonaItemDto
@@ -50,6 +55,7 @@ class UpieczonaMainViewModel : ViewModel() {
         .replace("</em>", "\n")
     }.toList()
   }
+
   private val ingredientCache = mutableMapOf<String, List<String>>()
   fun formatInstructionsTitle(input: String): List<String> {
     val regex = """<strong>(.*)<\/strong>""".toRegex()
@@ -87,18 +93,24 @@ class UpieczonaMainViewModel : ViewModel() {
     val document = Jsoup.parse(matches.toString())
 
     val paragraphs = document.select("p:not(:has(em))").map { paragraph ->
-      paragraph.html()  // Pobierz treść HTML akapitu
-        .replace("<br>", "\n   ").replace(Regex("<strong>.*?</strong>"), "").replace("<p>", "\n")
-        .replace("</p>", "\n")
+      var paragraphHtml = paragraph.html()
+      paragraphHtml = paragraphHtml.replaceFirst("<br>", "   ")
+      paragraphHtml = paragraphHtml.replace(Regex("<strong>.*?</strong>"), "")
+      paragraphHtml = paragraphHtml.replace("<p>", "\n")
+      paragraphHtml = paragraphHtml.replace("</p>", "\n")
+
+      paragraphHtml
     }
 
     return paragraphs
   }
+
   fun navigateToTagsPage(selectedItemsMap: MutableMap<Int, Int>, navController: NavController) {
     val listOfFilters = selectedItemsMap.values
     val postIndexString = listOfFilters.joinToString(", ")
     val routeWithArgument = "FilterPage/$postIndexString"
     navController.navigate(routeWithArgument)
   }
+
 
 }

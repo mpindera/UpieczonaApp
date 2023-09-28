@@ -1,4 +1,3 @@
 package com.example.upieczona.dtoposts
 
-class PostsOfUpieczona : ArrayList<
-        PostsOfUpieczonaItemDto>()
+class PostsOfUpieczona : ArrayList<PostsOfUpieczonaItemDto>()

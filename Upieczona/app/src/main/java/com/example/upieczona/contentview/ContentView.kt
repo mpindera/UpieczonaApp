@@ -2,6 +2,7 @@ package com.example.upieczona.contentview
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.pager.HorizontalPager
@@ -10,7 +11,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -22,6 +22,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
@@ -33,6 +34,8 @@ import coil.compose.AsyncImage
 import com.example.upieczona.destination.Destination
 import com.example.upieczona.favorite.FavoriteManager
 import com.example.upieczona.mainscreen.MainPageState
+import com.example.upieczona.staticobjects.MaterialsUtils.decodeHtml
+import com.example.upieczona.staticobjects.MaterialsUtils.swipeToReturn
 import com.example.upieczona.topappbar.TopAppBarUpieczona
 import com.example.upieczona.viewmodels.UpieczonaMainViewModel
 import com.example.upieczona.viewmodels.UpieczonaViewModel
@@ -47,7 +50,7 @@ fun ContentViewUpieczona(
 ) {
   val loc = LocalContext.current
   val favoriteManager = remember { FavoriteManager(loc) }
-
+  val isSwipedRight by remember { mutableStateOf(false) }
   val postDetails = remember(upieczonaViewModel.allPosts) {
     postIndex?.let { index ->
       upieczonaViewModel.allPosts.value.find { it.id == index }
@@ -73,8 +76,10 @@ fun ContentViewUpieczona(
       )
     },
   ) { padding ->
+
     Column(
-      modifier = Modifier.padding(padding)
+      modifier = Modifier
+        .padding(padding).swipeToReturn(isSwipedRight = isSwipedRight, navController = navController)
     ) {
       if (postDetails != null) {
 
@@ -87,19 +92,15 @@ fun ContentViewUpieczona(
         }
 
         val decodedTextFromTitleUpieczona = remember(postDetails) {
-          HtmlCompat.fromHtml(
-            postDetails.title.rendered, HtmlCompat.FROM_HTML_MODE_LEGACY
-          ).toString()
+          postDetails.title.rendered.decodeHtml()
         }
 
         LazyColumn(
-          modifier = Modifier.fillMaxSize(),
+          modifier = Modifier.fillMaxSize().padding(start = 13.dp, end = 13.dp),
           horizontalAlignment = Alignment.CenterHorizontally,
           verticalArrangement = Arrangement.Top
         ) {
           item {
-            Divider()
-
             ImagePager(
               urlsListPhotosUpieczona.size,
               urlsListPhotosUpieczona
@@ -132,7 +133,7 @@ fun ContentViewUpieczona(
               }
 
               Text(
-                modifier = Modifier.padding(top = 7.dp,bottom = 5.dp),
+                modifier = Modifier.padding(top = 7.dp, bottom = 5.dp),
                 fontFamily = MaterialTheme.typography.headlineLarge.fontFamily,
                 text = decodedTextFromTitleUpieczona,
                 fontSize = 20.sp,
@@ -141,18 +142,18 @@ fun ContentViewUpieczona(
 
             }
 
-              Column(
-                modifier = Modifier
-                  .fillMaxSize()
-                  .padding(top = 15.dp),
-                horizontalAlignment = Alignment.Start,
-                verticalArrangement = Arrangement.Center
-              ) {
-                FetchTitleWhenTwoTitle(
-                  ingredientTitleUpieczona,
-                  upieczonaMainViewModel,
-                  postDetails
-                )
+            Column(
+              modifier = Modifier
+                .fillMaxSize()
+                .padding(top = 15.dp),
+              horizontalAlignment = Alignment.Start,
+              verticalArrangement = Arrangement.Center
+            ) {
+              FetchTitleWhenTwoTitle(
+                ingredientTitleUpieczona,
+                upieczonaMainViewModel,
+                postDetails
+              )
 
             }
           }
@@ -170,7 +171,6 @@ fun ContentViewUpieczona(
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.error
           )
-          Spacer(modifier = Modifier.height(16.dp))
           navController.navigateUp()
         }
       }
@@ -181,7 +181,7 @@ fun ContentViewUpieczona(
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ImagePager(imageUrlsSize: Int, imageUrls: List<String>) {
-  val pageState = rememberPagerState(pageCount = { imageUrls.size }) // Provide source of truth
+  val pageState = rememberPagerState(pageCount = { imageUrls.size })
   HorizontalPager(
     state = pageState
   ) { pageIndex ->
@@ -201,7 +201,6 @@ fun ImagePager(imageUrlsSize: Int, imageUrls: List<String>) {
       )
     }
   }
-  Divider()
   Row(
     modifier = Modifier
       .height(20.dp)

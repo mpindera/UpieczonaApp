@@ -37,6 +37,7 @@ import coil.request.CachePolicy
 import coil.request.ImageRequest
 import com.example.upieczona.R
 import com.example.upieczona.dtoposts.PostsOfUpieczonaItemDto
+import com.example.upieczona.staticobjects.MaterialsUtils.decodeHtml
 import com.example.upieczona.viewmodels.UpieczonaViewModel
 
 @Composable
@@ -79,10 +80,7 @@ fun FavoriteGrid(
       state = scrollState
     ) {
       items(sortedFavoritePosts.size) { index ->
-        val decodedTextPostName = HtmlCompat.fromHtml(
-          sortedFavoritePosts[index].value.postName,
-          HtmlCompat.FROM_HTML_MODE_LEGACY
-        ).toString()
+        val decodedTextPostName = sortedFavoritePosts[index].value.postName.decodeHtml()
 
         Box(
           modifier = Modifier

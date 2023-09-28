@@ -110,7 +110,9 @@ fun MainPageOfUpieczona(
       )
     }
   }
+
 }
+
 
 @Composable
 private fun FetchAllPosts(upieczonaViewModel: UpieczonaViewModel) {
