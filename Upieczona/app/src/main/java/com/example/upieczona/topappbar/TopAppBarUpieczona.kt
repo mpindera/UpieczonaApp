@@ -111,22 +111,9 @@ fun TopBarDefault(
       navController = navController, onBackIconClick = onBackIconClick, pageInfo = pageInfo
     )
   }, actions = {
-    SearchIconButton(onSearchIconClick = onSearchIconClick, pageInfo = pageInfo)
+
   })
 
-}
-
-@Composable
-fun SearchIconButton(
-  onSearchIconClick: () -> Unit, pageInfo: MainPageState
-) {
-  IconButton(onClick = {
-    onSearchIconClick()
-  }) {
-    if (pageInfo == MainPageState.UPIECZONA_CLICKED) {
-      Icon(Icons.Default.Search, contentDescription = null)
-    }
-  }
 }
 
 @Composable
